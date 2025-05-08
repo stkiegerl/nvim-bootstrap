@@ -2,14 +2,14 @@
 
 ## Installation
 ### 1.  Install requirements
-	```bash
-	sudo dnf install -y bash git fzf fd-find ripgrep luarocks wget fontconfig
-	```
+```bash
+sudo dnf install -y bash git fzf fd-find ripgrep luarocks wget fontconfig
+```
 
 ### 2.  Install Neovim
-	```bash
-	sudo dnf install -y neovim python3-neovim
-	```
+```bash
+sudo dnf install -y neovim python3-neovim
+```
 
 ### 3. Install a nerd Font (optional)
 1. Create a Fonts Directory (if it doesn't exist) and move into it
