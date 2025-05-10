@@ -24,6 +24,7 @@ return {
       sources = {
         explorer = {
           actions = {
+            -- Provide multiple copy options for the filename under the cursor
             copy_file_path = {
               action = function(_, item)
                 if not item then
@@ -62,6 +63,7 @@ return {
                 end)
               end,
             },
+            -- Search within all files from the selected directory
             search_in_directory = {
               action = function(_, item)
                 if not item then
@@ -97,6 +99,8 @@ return {
                 })
               end,
             },
+            -- Compare two selected files
+            -- The files can be selected with Tab or Shift+Tab
             diff = {
               action = function(picker)
                 picker:close()
@@ -113,6 +117,7 @@ return {
               end,
             },
           },
+          -- Keybindings for the explorer actions
           win = {
             list = {
               keys = {
