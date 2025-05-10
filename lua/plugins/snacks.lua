@@ -6,7 +6,6 @@ return {
   opts = {
     bigfile = { enabled = true },
     bufdelete = { enabled = true },
-    },
     picker = {
       enabled = true,
       sources = {
