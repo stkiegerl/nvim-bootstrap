@@ -6,6 +6,19 @@ return {
   opts = {
     bigfile = { enabled = true },
     bufdelete = { enabled = true },
+    explorer = { enabled = true },
+    image = { enabled = false }, -- Enable when using Kitty or Ghosty as Terminal
+    input = { enabled = true },
+    quickfile = { enabled = true },
+    scroll = { enabled = true },
+    terminal = { enabled = true },
+    words = { enabled = true },
+    indent = {
+      enabled = true,
+      animate = {
+        enabled = false,
+      },
+    },
     picker = {
       enabled = true,
       sources = {
@@ -112,19 +125,6 @@ return {
         },
       },
     },
-    explorer = { enabled = true },
-    image = { enabled = false }, -- Enable when using Kitty or Ghosty as Terminal
-    indent = {
-      enabled = true,
-      animate = {
-        enabled = false,
-      },
-    },
-    input = { enabled = true },
-    quickfile = { enabled = true },
-    scroll = { enabled = true },
-    terminal = { enabled = true },
-    words = { enabled = true },
     dashboard = {
       enabled = true,
       sections = {
