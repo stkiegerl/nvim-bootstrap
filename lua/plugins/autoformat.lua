@@ -27,7 +27,8 @@ return {
             },
         },
         keys = {
-            { '<leader>cf', function() require('conform').format() { async = true, lsp_format = 'fallback' } end, desc = 'Format buffer/selection' },
+            -- Setting a keymap and make it async so it won't block Neovim if formatting takes a moment
+            { '<leader>cf', function() require('conform').format { async = true, lsp_format = 'fallback' } end, mode = '', desc = 'Format buffer' },
         },
         -- Install all formatters with Mason
         config = function(_, opts)
