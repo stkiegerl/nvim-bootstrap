@@ -27,7 +27,7 @@ return {
             },
         },
         keys = {
-            { '<leader>cf', function() require('conform').format() end, desc = 'Format buffer/selection' },
+            { '<leader>cf', function() require('conform').format() { async = true, lsp_format = 'fallback' } end, desc = 'Format buffer/selection' },
         },
         -- Install all formatters with Mason
         config = function(_, opts)
