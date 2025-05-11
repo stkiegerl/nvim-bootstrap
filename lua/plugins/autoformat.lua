@@ -1,67 +1,60 @@
 return {
     {
-        'mason-org/mason.nvim',
-        config = function() require('mason').setup() end,
-    },
-
-    -- Install all formatters
-    {
-        'WhoIsSethDaniel/mason-tool-installer.nvim',
-    },
-
-    {
-        -- Configure formatters
         'stevearc/conform.nvim',
-        dependencies = {
-            'mason-org/mason.nvim',
-            'WhoIsSethDaniel/mason-tool-installer',
+        dependencies = { 'mason-org/mason.nvim', opts = {} },
+        opts = {
+            formatters_by_ft = {
+                lua = { 'stylua' },
+                python = { 'isort', 'black' },
+                css = { 'prettier' },
+                html = { 'prettier' },
+                json = { 'prettier' },
+                yaml = { 'prettier' },
+                markdown = { 'prettier', 'doctoc' },
+                shell = { 'beautysh', 'shfmt' },
+                bash = { 'beautysh', 'shfmt' },
+                sh = { 'beautysh', 'shfmt' },
+                sql = { 'sql_formatter' },
+                terraform = { 'terraform_fmt' },
+                cpp = { 'clang-format' },
+                javascript = { 'prettierd', 'prettier', stop_after_first = true },
+                typescript = { 'prettierd', 'prettier', stop_after_first = true },
+            },
+            format_on_save = {
+                timeout_ms = 1000,
+                lsp_format = 'fallback',
+            },
         },
-        config = function()
-            require('mason-tool-installer').setup {
-                ensure_installed = {
-                    'stylua',
-                    'isort',
-                    'black',
-                    'prettier',
-                    'doctoc',
-                    'beautysh',
-                    'shfmt',
-                    'sql-formatter',
-                    'terraform',
-                    'rustfmt',
-                    'clang-format',
-                    'prettierd',
-                },
-                run_on_start = false,
-            }
-            require('conform').setup {
-                formatters_by_ft = {
-                    lua = { 'stylua' },
-                    -- Conform will run multiple formatters sequentially
-                    python = { 'isort', 'black' },
-                    -- You can customize some of the format options for the filetype (:help conform.format)
-                    css = { 'prettier' },
-                    html = { 'prettier' },
-                    json = { 'prettier' },
-                    yaml = { 'prettier' },
-                    markdown = { 'prettier', 'doctoc' },
-                    shell = { 'beautysh', 'shfmt' },
-                    bash = { 'beautysh', 'shfmt' },
-                    sh = { 'beautysh', 'shfmt' },
-                    sql = { 'sql_formatter' },
-                    terraform = { 'terraform_fmt' },
-                    rust = { 'rustfmt' },
-                    cpp = { 'clang-format' },
-                    -- Conform will run the first available formatter
-                    javascript = { 'prettierd', 'prettier', stop_after_first = true },
-                    typescript = { 'prettierd', 'prettier', stop_after_first = true },
-                },
-                format_on_save = {
-                    -- These options will be passed to conform.format()
-                    timeout_ms = 1000,
-                    lsp_format = 'fallback',
-                },
-            }
+        keys = {
+            { '<leader>cf', function() require('conform').format() end, desc = 'Format buffer/selection' },
+        },
+        -- Install all formatters with Mason
+        config = function(_, opts)
+            -- Derive list of package names
+            local registry = require 'mason-registry'
+
+            -- build a deduped list of formatter names:
+            local seen = {}
+            local formatters = {}
+            vim.iter(pairs(opts.formatters_by_ft)):each(function(_, tools)
+                vim.iter(ipairs(tools)):each(function(_, name)
+                    if type(name) == 'string' and not seen[name] then
+                        seen[name] = true
+                        table.insert(formatters, name)
+                    end
+                end)
+            end)
+
+            -- Install each formatter exactly once
+            for _, name in ipairs(formatters) do
+                if registry.has_package(name) then
+                    local pkg = registry.get_package(name)
+                    if not pkg:is_installed() then vim.schedule(function() pkg:install() end) end
+                end
+            end
+
+            -- Setup Conform with the same opts
+            require('conform').setup(opts)
         end,
     },
 }
